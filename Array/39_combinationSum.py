@@ -27,8 +27,26 @@ class Solution:
                 dfs(tar, temp, idx+1)
         dfs(target, [], 0)
         return result
-
+#相当于上面的解法，用for循环代替了一个内部的函数调用
+    def combinationSum1(self, candidates: List[int], target: int) -> List[List[int]]:
+        length = len(candidates)
+        if length == 0:
+            return []
+        candidates.sort()
+        res = []
+        def findcombinationSum(tar: int, index: int, c: List[int]):
+            if tar < 0:#满足结束条件
+                return
+            if tar == 0:#满足结束条件
+                res.append(c)
+                return
+            for i in range(index, length):
+                if candidates[i] > tar:#满足剪枝条件
+                    break
+                findcombinationSum(tar-candidates[i], i, c+[candidates[i]])
+        findcombinationSum(target,0,[])
+        return res
 if __name__ == '__main__':
     candidates = [2,3,5]
     target = 8
-    print(Solution().combinationSum(candidates, target))
+    print(Solution().combinationSum1(candidates, target))
