@@ -167,27 +167,29 @@ class Solution:
         return nums
 
     def heap_sort(self,nums:List[int]):
-        """堆排序 增序"""
-        def adjust_heap(l):
-            """从根节点root开始由上往下调整成大顶堆 """
-            t = l//2
-            if l % 2:#奇数，少一个右结点
-                if nums[l] > nums[t]:
-                    nums[l], nums[t] = nums[t], nums[l]
-                l -= 1
-            for i in range(t-1,-1,-1):#根
-                for _ in range(2):#左右孩子
-                    if nums[l] > nums[i]:
-                        nums[l], nums[i] = nums[i], nums[l]
-                    l -= 1
-        def build_heap(l):
+        """堆排序 增序 假设数组下标从1开始"""
+        def adjust_heap(l,n):
+            """从根节点root开始由上往下调整成大顶堆 arr[i] >= arr[2i+1] && arr[i] >= arr[2i+2] """
+            k = l * 2 + 1
+            while k < n:
+                if k + 1 < n and nums[k+1] > nums[k]:#是否有右结点，并大于左结点
+                    k += 1
+                if nums[k] > nums[l]:
+                    nums[k], nums[l] = nums[l], nums[k]
+                    l = k
+                    k = l * 2 + 1
+                else:
+                    break
+        n = len(nums)
+        def build_heap():
             """建大顶堆"""
-            for i in range(l//2,-1,-1):
-                adjust_heap(i)
-        for i in range(len(nums)-1,0,-1):
-            build_heap(i)
-            print(nums,i)
+            for i in range(n//2 - 1, -1, -1):
+                adjust_heap(i, n)
+        build_heap()
+        for i in range(n-1,0,-1):
+            print(nums, i)
             nums[0],nums[i] = nums[i],nums[0]
+            adjust_heap(0, i)
         return nums
 
     from functools import reduce
@@ -206,4 +208,4 @@ if __name__ == '__main__':
     nums = [49,38,65,97,76,13,27,49,109]
     nums1 = [65,38,97,76,13,27,49,8]
     nums2 = [4,2,2,6,7,8]
-    print(s.heap_sort(nums))
+    print(s.heap_sort(nums1))
